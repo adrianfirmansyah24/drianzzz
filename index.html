@@ -159,10 +159,11 @@
         }
 
         .nav-inner {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(14, 16, 23, 0.8);
+            background: rgba(14, 16, 23, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-subtle);
@@ -240,14 +241,51 @@
             transform: translateY(-2px);
         }
 
-        /* Mobile Hamburger */
+        /* Mobile Hamburger Toggle & Backdrop Overlay */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(4, 6, 14, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .mobile-toggle {
             display: none;
-            background: transparent;
-            border: none;
-            color: #ffffff;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid var(--border-glow);
+            color: var(--accent-cyan);
             font-size: 1.25rem;
             cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1002;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-toggle:hover, .mobile-toggle.active {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            transform: scale(1.05);
         }
 
         /* ==========================================================================
@@ -1079,13 +1117,14 @@
             }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             header {
                 width: calc(100% - 1.5rem);
                 top: 0.85rem;
             }
             .nav-inner {
-                padding: 0.6rem 1.25rem;
+                padding: 0.65rem 1.25rem;
+                border-radius: 20px;
             }
             .brand-logo {
                 font-size: 1.15rem;
@@ -1093,35 +1132,70 @@
             .nav-links {
                 display: none;
                 position: absolute;
-                top: calc(100% + 0.5rem);
+                top: calc(100% + 0.6rem);
                 left: 0;
                 right: 0;
-                background: rgba(11, 13, 20, 0.96);
+                background: rgba(10, 12, 18, 0.98);
                 backdrop-filter: blur(24px);
                 -webkit-backdrop-filter: blur(24px);
-                border: 1px solid var(--border-subtle);
+                border: 1px solid var(--border-glow);
                 border-radius: 20px;
-                padding: 1.5rem;
+                padding: 1.25rem;
                 flex-direction: column;
-                gap: 1.25rem;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+                gap: 0.75rem;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(99, 102, 241, 0.2);
+                z-index: 1001;
             }
             .nav-links.active {
-                display: flex;
+                display: flex !important;
+                animation: slideDownNav 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            @keyframes slideDownNav {
+                from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+                to { opacity: 1; transform: translateY(0) scale(1); }
             }
             .nav-link {
                 font-size: 1rem;
+                font-weight: 600;
                 width: 100%;
+                padding: 0.65rem 0.85rem;
+                border-radius: 12px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                transition: var(--transition-smooth);
+            }
+            .nav-link:hover, .nav-link:active {
+                background: rgba(99, 102, 241, 0.15);
+                color: var(--accent-cyan);
+                padding-left: 1.1rem;
             }
             .mobile-toggle {
+                display: flex !important;
+            }
+            .nav-cta {
+                display: none;
+            }
+            .mobile-drawer-cta {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 40px;
-                height: 40px;
-                border-radius: 10px;
-                background: rgba(255,255,255,0.05);
-                border: 1px solid var(--border-subtle);
+                gap: 0.6rem;
+                width: 100%;
+                margin-top: 0.4rem;
+                padding: 0.85rem;
+                background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
+                color: #ffffff;
+                font-weight: 700;
+                font-size: 0.95rem;
+                border-radius: 12px;
+                text-decoration: none;
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+                transition: var(--transition-smooth);
+            }
+            .mobile-drawer-cta:active {
+                transform: scale(0.98);
             }
             .hero-section {
                 padding-top: 7.5rem;
@@ -1266,6 +1340,7 @@
     <!-- Noise & Interactive FX -->
     <div class="noise-overlay"></div>
     <div class="spotlight" id="spotlight"></div>
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeNav()"></div>
     <canvas id="particleCanvas"></canvas>
 
     <!-- Header Navigation -->
@@ -1276,19 +1351,25 @@
                 <span>ADRIAN FIRMANSYAH</span>
             </a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#about" class="nav-link" onclick="closeNav()">About</a></li>
-                <li><a href="#architecture" class="nav-link" onclick="closeNav()">Code</a></li>
-                <li><a href="#projects" class="nav-link" onclick="closeNav()">Projects (6)</a></li>
-                <li><a href="#skills" class="nav-link" onclick="closeNav()">Arsenal</a></li>
-                <li><a href="#education" class="nav-link" onclick="closeNav()">Academic</a></li>
+                <li><a href="#about" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-user" style="color: var(--accent-cyan);"></i><span>About</span></a></li>
+                <li><a href="#architecture" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-code" style="color: var(--accent-cyan);"></i><span>Code</span></a></li>
+                <li><a href="#projects" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-cubes" style="color: var(--accent-cyan);"></i><span>Projects (6)</span></a></li>
+                <li><a href="#skills" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-layer-group" style="color: var(--accent-cyan);"></i><span>Arsenal</span></a></li>
+                <li><a href="#education" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-graduation-cap" style="color: var(--accent-cyan);"></i><span>Academic</span></a></li>
+                <li class="mobile-drawer-cta-wrap">
+                    <a href="#contact" class="mobile-drawer-cta" onclick="closeNav()">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Contact Me</span>
+                    </a>
+                </li>
             </ul>
             <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <a href="#contact" class="nav-cta">
                     <i class="fa-solid fa-paper-plane"></i>
                     <span>Contact</span>
                 </a>
-                <button class="mobile-toggle" onclick="toggleNav()">
-                    <i class="fa-solid fa-bars"></i>
+                <button class="mobile-toggle" id="mobileToggle" onclick="toggleNav()" aria-label="Toggle Navigation Menu" aria-expanded="false">
+                    <i class="fa-solid fa-bars" id="toggleIcon"></i>
                 </button>
             </div>
         </div>
@@ -1787,12 +1868,39 @@
         /* Mobile Navigation Toggle */
         function toggleNav() {
             const navLinks = document.getElementById('navLinks');
-            if (navLinks) navLinks.classList.toggle('active');
+            const mobileToggle = document.getElementById('mobileToggle');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const toggleIcon = document.getElementById('toggleIcon');
+
+            if (!navLinks) return;
+
+            const isActive = navLinks.classList.toggle('active');
+            
+            if (mobileToggle) {
+                mobileToggle.classList.toggle('active', isActive);
+                mobileToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+            }
+            if (mobileOverlay) {
+                mobileOverlay.classList.toggle('active', isActive);
+            }
+            if (toggleIcon) {
+                toggleIcon.className = isActive ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+            }
         }
 
         function closeNav() {
             const navLinks = document.getElementById('navLinks');
+            const mobileToggle = document.getElementById('mobileToggle');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const toggleIcon = document.getElementById('toggleIcon');
+
             if (navLinks) navLinks.classList.remove('active');
+            if (mobileToggle) {
+                mobileToggle.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            }
+            if (mobileOverlay) mobileOverlay.classList.remove('active');
+            if (toggleIcon) toggleIcon.className = 'fa-solid fa-bars';
         }
 
         /* Interactive Spotlight Cursor */
