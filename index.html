@@ -1285,15 +1285,15 @@
            ========================================================================== */
         /* Fluid typography base overrides */
         .hero-title {
-            font-size: clamp(2.25rem, 5.5vw, 4.25rem);
+            font-size: clamp(2rem, 5vw, 3.85rem);
         }
 
         .section-title {
-            font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+            font-size: clamp(1.65rem, 4.2vw, 2.5rem);
         }
 
         .footer-cta h2 {
-            font-size: clamp(1.8rem, 4.5vw, 3rem);
+            font-size: clamp(1.65rem, 4vw, 2.75rem);
         }
 
         /* Disable heavy spotlight cursor on touch devices to prevent lag */
@@ -1450,25 +1450,41 @@
             }
 
             .hero-section {
-                padding-top: 2.75rem;
-                padding-bottom: 3.5rem;
+                padding-top: 2.5rem;
+                padding-bottom: 3rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 5vw, 3rem);
+                line-height: 1.12;
             }
 
             .hero-description {
-                font-size: 1.05rem;
-                margin-bottom: 2rem;
+                font-size: 1rem;
+                line-height: 1.6;
+                margin-bottom: 1.75rem;
+                max-width: 100%;
             }
 
             .hero-action-group {
                 flex-direction: column;
                 align-items: stretch;
                 width: 100%;
+                gap: 0.75rem;
             }
 
-            .btn-primary,
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
             .btn-secondary {
                 width: 100%;
                 justify-content: center;
+                padding: 0.7rem 1.35rem;
+                font-size: 0.875rem;
             }
 
             .metrics-section {
@@ -1616,13 +1632,59 @@
                 right: 0.75rem;
             }
 
+            .hero-section {
+                padding-top: 1.75rem;
+                padding-bottom: 2.25rem;
+            }
+
             .hero-badge-wrap {
-                gap: 0.4rem;
-                padding: 0.35rem 0.75rem;
+                gap: 0.35rem;
+                padding: 0.25rem 0.65rem;
+                margin-bottom: 0.85rem;
+            }
+
+            .hero-badge-wrap .mono-tag {
+                font-size: 0.72rem;
             }
 
             .gpa-pill {
-                font-size: 0.7rem;
+                font-size: 0.68rem;
+                padding: 0.15rem 0.45rem;
+            }
+
+            .hero-title {
+                font-size: clamp(1.65rem, 6.8vw, 2.15rem);
+                line-height: 1.18;
+                letter-spacing: -0.02em;
+                margin-bottom: 0.85rem;
+            }
+
+            .hero-description {
+                font-size: 0.9rem;
+                line-height: 1.55;
+                margin-bottom: 1.25rem;
+                color: var(--text-muted);
+            }
+
+            .hero-action-group {
+                gap: 0.55rem;
+                width: 100%;
+            }
+
+            .btn-primary {
+                padding: 0.65rem 1.15rem;
+                font-size: 0.85rem;
+                border-radius: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn-secondary {
+                padding: 0.6rem 1.15rem;
+                font-size: 0.825rem;
+                border-radius: 10px;
+                width: 100%;
+                justify-content: center;
             }
 
             .metrics-grid {
@@ -2386,46 +2448,62 @@
                     currentLineCode.innerHTML = lineData.html + '<span class="typing-cursor"></span>';
                 }
 
-                activeTypingTimeout = setTimeout(() => {
-                    if (currentLineElem) {
-                        currentLineElem.classList.remove('active-typing');
-                    }
-                    lineIndex++;
-                    streamNextLine();
-                }, 110);
-            }
-
-            streamNextLine();
+            activeTypingTimeout = setTimeout(() => {
+                if (currentLineElem) {
+                    currentLineElem.classList.remove('active-typing');
+                }
+                lineIndex++;
+                streamNextLine();
+            }, 280); // 0.4x speed for deliberate executive code streaming
         }
 
-        function switchTab(tabKey, evt) {
-            document.querySelectorAll('.ide-tab').forEach(tab => tab.classList.remove('active'));
-            if (evt && evt.currentTarget) {
-                evt.currentTarget.classList.add('active');
-            }
-            runCodeStreamingAnimation(tabKey);
-        }
+        streamNextLine();
+    }
 
-        function rerunCodeAnimation() {
-            runCodeStreamingAnimation(currentActiveTab);
+    function switchTab(tabKey, evt) {
+        document.querySelectorAll('.ide-tab').forEach(tab => tab.classList.remove('active'));
+        if (evt && evt.currentTarget) {
+            evt.currentTarget.classList.add('active');
         }
+        runCodeStreamingAnimation(tabKey);
+    }
 
-        // Initialize when scrolled into view or immediately
-        const architectureSection = document.getElementById('architecture');
-        if (architectureSection && 'IntersectionObserver' in window) {
-            let hasAnimated = false;
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !hasAnimated) {
-                        hasAnimated = true;
-                        runCodeStreamingAnimation('engineer');
-                    }
-                });
-            }, { threshold: 0.2 });
-            observer.observe(architectureSection);
-        } else {
-            runCodeStreamingAnimation('engineer');
-        }
+    function rerunCodeAnimation() {
+        runCodeStreamingAnimation(currentActiveTab);
+    }
+
+    // Render initial blueprint state
+    function renderInitialIdleBlueprint() {
+        const container = document.getElementById('ideContent');
+        const statusText = document.getElementById('ideStatusText');
+        if (!container) return;
+        const lines = tabsData['engineer'];
+        container.innerHTML = lines.map((item, idx) => `
+            <div class="code-line revealed" id="codeLine_${idx}">
+                <span class="line-num">${item.num}</span>
+                <span class="line-code" id="lineCode_${idx}">${item.html}${idx === lines.length - 1 ? '<span class="typing-cursor"></span>' : ''}</span>
+            </div>
+        `).join('');
+        if (statusText) statusText.textContent = 'Blueprint Stream Ready • Scroll to run live';
+    }
+
+    renderInitialIdleBlueprint();
+
+    // Trigger animated streaming strictly when user scrolls down to Developer Blueprint section
+    const architectureSection = document.getElementById('architecture');
+    let hasAnimatedBlueprint = false;
+
+    if (architectureSection && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasAnimatedBlueprint) {
+                    hasAnimatedBlueprint = true;
+                    runCodeStreamingAnimation('engineer');
+                }
+            });
+        }, { threshold: 0.25, rootMargin: '0px 0px -40px 0px' });
+        observer.observe(architectureSection);
+    }
 
         /* Canvas Particle Background */
         const canvas = document.getElementById('particleCanvas');
