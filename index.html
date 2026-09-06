@@ -223,6 +223,10 @@
             color: #ffffff;
         }
 
+        .mobile-only-link {
+            display: none !important;
+        }
+
         .nav-cta {
             background: rgba(99, 102, 241, 0.15);
             border: 1px solid rgba(99, 102, 241, 0.4);
@@ -1204,6 +1208,10 @@
             .nav-cta {
                 display: none !important;
             }
+            .mobile-only-link {
+                display: block !important;
+                width: 100%;
+            }
             .hero-section {
                 padding-top: 7.5rem;
                 padding-bottom: 3.5rem;
@@ -1363,7 +1371,7 @@
                 <li><a href="#projects" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-cubes"></i><span>Projects (6)</span></a></li>
                 <li><a href="#skills" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-layer-group"></i><span>Arsenal</span></a></li>
                 <li><a href="#education" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-graduation-cap"></i><span>Academic</span></a></li>
-                <li><a href="#contact" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></a></li>
+                <li class="mobile-only-link"><a href="#contact" class="nav-link" onclick="closeNav()"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></a></li>
             </ul>
             <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <a href="#contact" class="nav-cta">
