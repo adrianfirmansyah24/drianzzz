@@ -327,6 +327,23 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   transition: background-color 180ms ease;
 }
 .project-card:hover { background: var(--surface); }
+.project-media {
+  display: block;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.project-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 220ms ease;
+}
+.project-media:hover img { transform: scale(1.012); }
+.project-media:focus-visible { outline-offset: 4px; }
 .project-featured { grid-column: 1/-1; min-height: 470px; background: var(--surface); }
 .project-featured:hover { background: var(--surface-light); }
 .project-featured .project-body {
@@ -350,7 +367,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   flex-direction: column;
   justify-content: space-between;
   gap: 2.5rem;
-  padding: clamp(3rem,8vw,6rem) 0 2rem;
+  padding: clamp(2.2rem,5vw,4rem) 0 2rem;
 }
 .project-body h3 {
   margin: 0;
@@ -363,6 +380,18 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
 }
 .project-card:not(.project-featured) .project-body h3 { font-size: clamp(2.8rem,5vw,4.3rem); }
 .project-summary { max-width: 620px; margin: 1rem 0 0; color: var(--muted); font-size: .95rem; }
+.project-caption {
+  display: inline-flex;
+  margin: 1rem 0 0;
+  padding: .3rem .55rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .project-detail { max-width: 500px; margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.75; }
 .project-footer { padding-top: 1.4rem; border-top: 1px solid var(--line); }
 .tag-list { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
@@ -372,6 +401,27 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
 .text-link:hover { color: var(--accent); }
 .link-note { color: var(--faint); }
 .project-links { display: flex; gap: 1rem; }
+.project-cta {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: .55rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  padding: .55rem .75rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: .72rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+.project-cta:hover { border-color: var(--accent); color: var(--accent); }
+.project-cta-primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.project-cta-primary:hover { border-color: var(--text); background: var(--text); color: var(--bg); }
 
 .section-heading.compact { grid-template-columns: 1fr 2.2fr; }
 .timeline { border-top: 1px solid var(--line); }
@@ -534,6 +584,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   .project-card:not(.project-featured) .project-body h3, .project-body h3 { font-size: clamp(3rem,15vw,4.3rem); }
   .project-footer { align-items: flex-start; }
   .project-footer, .project-links { flex-direction: column; }
+  .project-links, .project-cta { width: 100%; }
   .timeline-item { grid-template-columns: 1fr; gap: 1.3rem; }
   .timeline-item > p:last-child { grid-column: auto; }
   .about-intro h2 { font-size: clamp(3.5rem,17vw,5rem); }
@@ -628,11 +679,15 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
 
       <div class="project-grid">
         <article class="project-card project-featured">
+          <a class="project-media" href="assets/projects/orbhita-ui-prototype.jpg" target="_blank" aria-label="Open the full Orbhita UI prototype image">
+            <img src="assets/projects/orbhita-ui-prototype.jpg" alt="Orbhita calendar dashboard UI prototype showing a monthly schedule and read-only Google Calendar events" width="1200" height="630">
+          </a>
           <div class="project-topline"><p>Team project / Backend</p><span>01</span></div>
           <div class="project-body">
             <div>
               <h3>Orbhita</h3>
               <p class="project-summary">An academic planning assistant that brings schedules and calendar events into one workflow.</p>
+              <p class="project-caption">UI prototype</p>
             </div>
             <p class="project-detail">Contributed to the backend using Supabase and PostgreSQL, including per-user access controls with Row Level Security, TypeScript Edge Functions, and read-only Google Calendar synchronization.</p>
           </div>
@@ -643,6 +698,9 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
         </article>
 
         <article class="project-card">
+          <a class="project-media" href="https://talentgroup.cloud/" target="_blank" rel="noreferrer" aria-label="Visit TalentGroup.id">
+            <img src="assets/projects/talentgroup.jpg" alt="TalentGroup.id learning platform homepage" width="1350" height="926" loading="lazy">
+          </a>
           <div class="project-topline"><p>Community platform</p><span>02</span></div>
           <div class="project-body">
             <div>
@@ -653,11 +711,14 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
           </div>
           <div class="project-footer">
             <ul class="tag-list" aria-label="Contribution areas"><li>Full-stack</li><li>Product</li><li>Community</li></ul>
-            <a class="text-link" href="https://talentgroup.cloud/" target="_blank" rel="noreferrer">Visit site <span aria-hidden="true">↗</span></a>
+            <a class="project-cta" href="https://talentgroup.cloud/" target="_blank" rel="noreferrer">talentgroup.cloud <span aria-hidden="true">↗</span></a>
           </div>
         </article>
 
         <article class="project-card">
+          <a class="project-media" href="https://klikweb.blog/" target="_blank" rel="noreferrer" aria-label="Visit KlikWeb">
+            <img src="assets/projects/klikweb.jpg" alt="KlikWeb homepage and website portfolio" width="1350" height="926" loading="lazy">
+          </a>
           <div class="project-topline"><p>Client web development</p><span>03</span></div>
           <div class="project-body">
             <div>
@@ -668,7 +729,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
           </div>
           <div class="project-footer">
             <ul class="tag-list" aria-label="Technologies"><li>Laravel</li><li>MySQL</li><li>Docker</li></ul>
-            <a class="text-link" href="https://klikweb.blog/" target="_blank" rel="noreferrer">Visit site <span aria-hidden="true">↗</span></a>
+            <a class="project-cta" href="https://klikweb.blog/" target="_blank" rel="noreferrer">klikweb.blog <span aria-hidden="true">↗</span></a>
           </div>
         </article>
 
@@ -683,11 +744,14 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
           </div>
           <div class="project-footer">
             <ul class="tag-list" aria-label="Technologies"><li>Next.js</li><li>TypeScript</li><li>REST API</li></ul>
-            <span class="link-note">Link not public yet</span>
+            <a class="project-cta" href="https://github.com/Hackathon-Sectors-Team/bursabukti" target="_blank" rel="noreferrer">View repository <span aria-hidden="true">↗</span></a>
           </div>
         </article>
 
         <article class="project-card">
+          <a class="project-media" href="https://cobagame.vercel.app/" target="_blank" rel="noreferrer" aria-label="Play English Tennis Arena">
+            <img src="assets/projects/english-tennis-arena-gameplay.jpg" alt="English Tennis Arena gameplay with two neon paddles and a countdown" width="1363" height="904" loading="lazy">
+          </a>
           <div class="project-topline"><p>Educational game</p><span>05</span></div>
           <div class="project-body">
             <div>
@@ -699,8 +763,8 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
           <div class="project-footer">
             <ul class="tag-list" aria-label="Technologies"><li>JavaScript</li><li>HTML Canvas</li></ul>
             <div class="project-links">
-              <a class="text-link" href="https://cobagame.vercel.app/" target="_blank" rel="noreferrer">Play demo <span aria-hidden="true">↗</span></a>
-              <a class="text-link" href="https://github.com/adrianfirmansyah24/cobagame" target="_blank" rel="noreferrer">View code <span aria-hidden="true">↗</span></a>
+              <a class="project-cta project-cta-primary" href="https://cobagame.vercel.app/" target="_blank" rel="noreferrer">Play game <span aria-hidden="true">↗</span></a>
+              <a class="project-cta" href="https://github.com/adrianfirmansyah24/cobagame" target="_blank" rel="noreferrer">View code <span aria-hidden="true">↗</span></a>
             </div>
           </div>
         </article>
