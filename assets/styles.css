@@ -993,11 +993,6 @@ h1 {
   transform:translateY(-3px);
 }
 
-.project-card:target {
-  outline:2px solid var(--accent);
-  outline-offset:5px;
-}
-
 .project-media {
   grid-column:2;
   grid-row:1/4;
