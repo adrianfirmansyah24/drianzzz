@@ -18,609 +18,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
     try {
-      if (localStorage.getItem("adrian-theme") === "dark") {
+      const savedTheme = localStorage.getItem("adrian-theme");
+      if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
         document.documentElement.dataset.theme = "dark";
       }
     } catch (error) {}
   </script>
-  <style>
-:root {
-  --bg: #f6f2ea;
-  --surface: #ece7dd;
-  --surface-light: #e4ded2;
-  --text: #1c1c1c;
-  --muted: #55565b;
-  --faint: #77787d;
-  --accent: #9f3037;
-  --accent-soft: rgba(159, 48, 55, .17);
-  --line: rgba(28, 28, 28, .18);
-  --header-bg: rgba(246, 242, 234, .92);
-  --panel-overlay: rgba(246, 242, 234, .9);
-  --texture-line: rgba(28, 28, 28, .025);
-  --on-accent: #fffaf3;
-  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --max: 1280px;
-}
-
-[data-theme="dark"] {
-  --bg: #101114;
-  --surface: #191b20;
-  --surface-light: #202229;
-  --text: #f4f1ec;
-  --muted: #afb1ba;
-  --faint: #858791;
-  --accent: #f06769;
-  --accent-soft: rgba(240, 103, 105, .16);
-  --line: rgba(244, 241, 236, .16);
-  --header-bg: rgba(16, 17, 20, .92);
-  --panel-overlay: rgba(16, 17, 20, .88);
-  --texture-line: rgba(255, 255, 255, .018);
-  --on-accent: #151518;
-}
-
-*, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 6rem; color-scheme: light; }
-html[data-theme="dark"] { color-scheme: dark; }
-body {
-  margin: 0;
-  overflow-x: hidden;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-body::before {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image: linear-gradient(var(--texture-line) 1px, transparent 1px);
-  background-size: 100% 8px;
-  content: "";
-  pointer-events: none;
-}
-a { color: inherit; }
-button, a, summary { -webkit-tap-highlight-color: transparent; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
-::selection { background: var(--accent); color: var(--bg); }
-
-.skip-link {
-  position: fixed;
-  top: .75rem;
-  left: .75rem;
-  z-index: 100;
-  padding: .7rem 1rem;
-  background: var(--text);
-  color: var(--bg);
-  font-weight: 600;
-  text-decoration: none;
-  transform: translateY(-150%);
-  transition: transform 150ms ease;
-}
-.skip-link:focus { transform: translateY(0); }
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  border-bottom: 1px solid var(--line);
-  background: var(--header-bg);
-  backdrop-filter: blur(14px);
-}
-.nav-shell {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(calc(100% - 3rem), var(--max));
-  min-height: 4.75rem;
-  margin: 0 auto;
-}
-.brand {
-  font-family: var(--display);
-  font-size: 1.65rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -.03em;
-  text-decoration: none;
-}
-.brand span { color: var(--accent); }
-.desktop-nav { display: flex; align-items: center; gap: clamp(1.4rem, 3vw, 2.75rem); }
-.desktop-nav a {
-  color: var(--muted);
-  font-size: .84rem;
-  font-weight: 500;
-  letter-spacing: .04em;
-  text-decoration: none;
-  transition: color 150ms ease;
-}
-.desktop-nav a:hover { color: var(--text); }
-.nav-menu { display: none; }
-.theme-toggle {
-  display: inline-flex;
-  gap: .55rem;
-  align-items: center;
-  padding: .48rem .7rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text);
-  font: 600 .72rem/1 var(--sans);
-  letter-spacing: .04em;
-  cursor: pointer;
-}
-.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
-.theme-dot { width: .48rem; height: .48rem; border-radius: 50%; background: var(--accent); }
-
-.hero, .section, .contact { width: min(calc(100% - 3rem), var(--max)); margin: 0 auto; }
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0,1.4fr) minmax(320px,.6fr);
-  gap: clamp(3rem,7vw,7rem);
-  align-items: stretch;
-  min-height: calc(100svh - 4.75rem);
-  padding: clamp(5rem,9vw,8.5rem) 0 4rem;
-}
-.hero-copy { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; }
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: .85rem;
-  margin: 0 0 2rem;
-  color: var(--muted);
-  font-size: .72rem;
-  font-weight: 600;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-}
-.eyebrow span { color: var(--accent); }
-.hero h1, .section-heading h2, .contact h2 {
-  margin: 0;
-  font-family: var(--display);
-  font-weight: 700;
-  line-height: .83;
-  letter-spacing: -.045em;
-  text-transform: uppercase;
-}
-.hero h1 { max-width: 100%; font-size: clamp(5.5rem,9vw,8.5rem); }
-.hero-role {
-  margin: 2.3rem 0 0;
-  color: var(--accent);
-  font-family: var(--display);
-  font-size: clamp(1.35rem,2.5vw,2rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: .01em;
-  text-transform: uppercase;
-}
-.hero-intro {
-  max-width: 690px;
-  margin: 1.15rem 0 0;
-  color: var(--muted);
-  font-size: clamp(1rem,1.4vw,1.18rem);
-  line-height: 1.75;
-}
-.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.2rem; }
-.button {
-  display: inline-flex;
-  gap: 2rem;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 180px;
-  padding: .9rem 1.05rem;
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  font-size: .82rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
-}
-.button-primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-.button-primary:hover { border-color: var(--text); background: var(--text); }
-.button-quiet:hover { border-color: var(--text); background: var(--text); color: var(--bg); }
-
-.hero-panel {
-  position: relative;
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: 560px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  background: var(--surface);
-}
-.hero-panel::before {
-  position: absolute;
-  top: 1.4rem;
-  right: 1.4rem;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--accent);
-  content: "";
-}
-.hero-panel::after {
-  position: absolute;
-  inset: 35% 0 0;
-  z-index: 0;
-  background: linear-gradient(to bottom, transparent, rgba(0,0,0,.38));
-  content: "";
-  pointer-events: none;
-}
-.profile-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 53% center;
-}
-.panel-mark {
-  position: absolute;
-  top: 8%;
-  left: -.04em;
-  color: transparent;
-  font-family: var(--display);
-  font-size: clamp(10rem,20vw,18rem);
-  font-weight: 700;
-  line-height: .8;
-  letter-spacing: -.08em;
-  -webkit-text-stroke: 1px var(--line);
-  user-select: none;
-}
-.panel-content, .panel-meta { position: relative; z-index: 1; padding: 1.5rem; }
-.panel-content {
-  margin: 0 1.5rem;
-  border-left: 2px solid var(--accent);
-  background: var(--panel-overlay);
-}
-.panel-label, .card-label {
-  margin: 0 0 .65rem;
-  color: var(--accent);
-  font-size: .7rem;
-  font-weight: 600;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-}
-.panel-content > p:last-child { margin: 0; font-size: .95rem; line-height: 1.65; }
-.panel-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin: 1.5rem 0 0;
-  border-top: 1px solid var(--line);
-}
-.panel-meta div { display: grid; gap: .2rem; }
-.panel-meta dt { color: var(--faint); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; }
-.panel-meta dd { margin: 0; font-size: .8rem; font-weight: 500; }
-
-.section { padding: clamp(6rem,10vw,10rem) 0; border-top: 1px solid var(--line); }
-.section-heading {
-  display: grid;
-  grid-template-columns: 1fr 1.35fr .85fr;
-  gap: 2rem;
-  align-items: end;
-  margin-bottom: clamp(3rem,6vw,5rem);
-}
-.section-heading .eyebrow { align-self: start; }
-.section-heading h2, .contact h2 { font-size: clamp(4.2rem,8vw,7.5rem); }
-.section-heading > p:last-child { margin: 0; color: var(--muted); font-size: .92rem; }
-
-.project-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--line);
-  border-left: 1px solid var(--line);
-}
-.project-card {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  min-height: 520px;
-  padding: clamp(1.4rem,3vw,2.25rem);
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--bg);
-  transition: background-color 180ms ease;
-}
-.project-card:hover { background: var(--surface); }
-.project-card-link {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-.project-card-link:focus-visible { position: relative; z-index: 2; outline-offset: -4px; }
-.project-card-link:hover .project-cta { border-color: var(--accent); color: var(--accent); }
-.project-card-link:hover .project-cta-primary { border-color: var(--text); background: var(--text); color: var(--bg); }
-.project-media {
-  display: block;
-  aspect-ratio: 16 / 9;
-  margin-bottom: 1.5rem;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background: #fff;
-}
-.project-media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform 220ms ease;
-}
-.project-media:hover img { transform: scale(1.012); }
-.project-media:focus-visible { outline-offset: 4px; }
-.project-featured { grid-column: 1/-1; min-height: 470px; background: var(--surface); }
-.project-featured:hover { background: var(--surface-light); }
-.project-featured .project-body {
-  display: grid;
-  grid-template-columns: 1.3fr .7fr;
-  gap: 3rem;
-  align-items: end;
-}
-.project-topline, .project-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  align-items: center;
-}
-.project-topline { color: var(--faint); font-size: .68rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
-.project-topline p { margin: 0; }
-.project-topline span { color: var(--accent); }
-.project-body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2.5rem;
-  padding: clamp(2.2rem,5vw,4rem) 0 2rem;
-}
-.project-body h3 {
-  margin: 0;
-  font-family: var(--display);
-  font-size: clamp(3rem,6vw,5.8rem);
-  font-weight: 700;
-  line-height: .9;
-  letter-spacing: -.035em;
-  text-transform: uppercase;
-}
-.project-card:not(.project-featured) .project-body h3 { font-size: clamp(2.8rem,5vw,4.3rem); }
-.project-summary { max-width: 620px; margin: 1rem 0 0; color: var(--muted); font-size: .95rem; }
-.project-caption {
-  display: inline-flex;
-  margin: 1rem 0 0;
-  padding: .3rem .55rem;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  color: var(--accent);
-  font-size: .66rem;
-  font-weight: 600;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-.project-detail { max-width: 500px; margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.75; }
-.project-footer { padding-top: 1.4rem; border-top: 1px solid var(--line); }
-.tag-list { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
-.tag-list li { padding: .3rem .55rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .66rem; }
-.text-link, .link-note { flex: 0 0 auto; font-size: .76rem; font-weight: 600; }
-.text-link { text-underline-offset: .35em; text-decoration-color: var(--accent); transition: color 150ms ease; }
-.text-link:hover { color: var(--accent); }
-.link-note { color: var(--faint); }
-.project-links { display: flex; gap: 1rem; }
-.project-cta {
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: .55rem;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.35rem;
-  padding: .55rem .75rem;
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  background: var(--bg);
-  color: var(--text);
-  font-size: .72rem;
-  font-weight: 600;
-  line-height: 1.2;
-  text-decoration: none;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
-}
-.project-cta:hover { border-color: var(--accent); color: var(--accent); }
-.project-cta-primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-.project-cta-primary:hover { border-color: var(--text); background: var(--text); color: var(--bg); }
-
-.section-heading.compact { grid-template-columns: 1fr 2.2fr; }
-.timeline { border-top: 1px solid var(--line); }
-.timeline-item {
-  display: grid;
-  grid-template-columns: .7fr 1.1fr 1.2fr;
-  gap: 2rem;
-  padding: 2.5rem 0;
-  border-bottom: 1px solid var(--line);
-}
-.timeline-date { margin: 0; color: var(--faint); font-size: .75rem; letter-spacing: .04em; }
-.timeline-item h3 {
-  margin: 0;
-  font-family: var(--display);
-  font-size: clamp(1.8rem,3vw,2.4rem);
-  font-weight: 600;
-  line-height: 1;
-  text-transform: uppercase;
-}
-.timeline-company { margin: .6rem 0 0; color: var(--accent); font-size: .8rem; }
-.timeline-item > p:last-child { margin: 0; color: var(--muted); font-size: .88rem; }
-
-.about { display: grid; grid-template-columns: 1.3fr .7fr; gap: 2rem; }
-.about-intro { grid-row: span 2; padding-right: clamp(1rem,8vw,8rem); }
-.about-intro h2 {
-  max-width: 780px;
-  margin: 0;
-  font-family: var(--display);
-  font-size: clamp(3.7rem,7vw,6.8rem);
-  font-weight: 700;
-  line-height: .92;
-  letter-spacing: -.04em;
-  text-transform: uppercase;
-}
-.about-intro > p:last-child { max-width: 660px; margin: 2rem 0 0; color: var(--muted); font-size: clamp(1rem,1.5vw,1.12rem); }
-.education-card, .skills { padding: 1.75rem; border: 1px solid var(--line); background: var(--surface); }
-.about-intro, .education-card, .skills { min-width: 0; }
-.education-card h3 { margin: 2.5rem 0 .4rem; font-family: var(--display); font-size: 2.4rem; line-height: 1; text-transform: uppercase; }
-.education-card > p:not(.card-label) { margin: 0; color: var(--muted); font-size: .88rem; }
-.education-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
-.education-meta p { display: grid; gap: .2rem; margin: 0; font-size: .78rem; }
-.education-meta span { color: var(--faint); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
-.skills { background: transparent; }
-.skill-group { display: grid; grid-template-columns: .7fr 1.3fr; gap: 1rem; padding: 1rem 0; border-top: 1px solid var(--line); }
-.skill-group:first-of-type { margin-top: 2rem; }
-.skill-group h3, .skill-group p { margin: 0; font-size: .78rem; }
-.skill-group h3 { color: var(--text); }
-.skill-group p { color: var(--muted); }
-
-.contact { padding: clamp(6rem,12vw,11rem) 0 2rem; border-top: 1px solid var(--line); }
-.contact h2 { max-width: 1000px; }
-.contact-copy { max-width: 560px; margin: 2.5rem 0 1.5rem; color: var(--muted); }
-.contact-email {
-  display: inline-flex;
-  gap: 1rem;
-  align-items: center;
-  font-family: var(--display);
-  font-size: clamp(1.35rem,3.5vw,2.7rem);
-  font-weight: 600;
-  line-height: 1.1;
-  text-decoration-color: var(--accent);
-  text-underline-offset: .2em;
-  transition: color 150ms ease;
-}
-.contact-email:hover { color: var(--accent); }
-.contact-footer {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 2rem;
-  align-items: end;
-  margin-top: clamp(6rem,14vw,12rem);
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
-}
-.contact-footer p { margin: 0; font-size: .78rem; font-weight: 600; line-height: 1.5; }
-.contact-footer p span { color: var(--faint); font-weight: 400; }
-.contact-footer nav { display: flex; gap: 1.5rem; }
-.contact-footer nav a, .back-top { font-size: .72rem; text-underline-offset: .3em; text-decoration-color: var(--accent); }
-.back-top { justify-self: end; }
-
-@media (max-width: 960px) {
-  .hero { grid-template-columns: 1fr; min-height: auto; }
-  .hero-panel { min-height: 430px; }
-  .panel-mark { font-size: 17rem; }
-  .section-heading { grid-template-columns: .7fr 1.3fr; }
-  .section-heading > p:last-child { grid-column: 2; }
-  .project-featured .project-body { grid-template-columns: 1fr; }
-  .timeline-item { grid-template-columns: .55fr 1fr; }
-  .timeline-item > p:last-child { grid-column: 2; }
-  .about { grid-template-columns: 1fr; }
-  .about-intro { grid-row: auto; padding: 0 0 2rem; }
-}
-
-@media (max-width: 680px) {
-  .nav-shell, .hero, .section, .contact { width: min(calc(100% - 2rem), var(--max)); }
-  .desktop-nav { display: none; }
-  .nav-menu { position: relative; display: block; }
-  .nav-menu summary {
-    display: flex;
-    gap: .6rem;
-    align-items: center;
-    color: var(--muted);
-    font-size: .76rem;
-    font-weight: 500;
-    list-style: none;
-    cursor: pointer;
-  }
-  .nav-menu summary::-webkit-details-marker { display: none; }
-  .nav-menu[open] summary { color: var(--text); }
-  .nav-menu nav {
-    position: fixed;
-    top: 4.75rem;
-    right: 0;
-    left: 0;
-    display: grid;
-    gap: 0;
-    padding: 0 1rem 1rem;
-    border-bottom: 1px solid var(--line);
-    background: var(--bg);
-  }
-  .nav-menu nav a {
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--line);
-    font-family: var(--display);
-    font-size: 1.5rem;
-    text-transform: uppercase;
-  }
-  .nav-menu nav .theme-toggle {
-    justify-content: space-between;
-    width: 100%;
-    margin-top: .85rem;
-    padding: .9rem 0;
-    border: 0;
-    border-radius: 0;
-    font-family: var(--display);
-    font-size: 1.35rem;
-    text-transform: uppercase;
-  }
-  .hero { gap: 3.5rem; padding-top: 4.25rem; }
-  .hero h1 { max-width: 100%; font-size: clamp(3.55rem,16vw,4.5rem); }
-  .hero-role { margin-top: 1.8rem; }
-  .hero-actions, .button { width: 100%; }
-  .hero-panel { min-height: 390px; }
-  .panel-mark { font-size: 13rem; }
-  .panel-content { margin: 0 1rem; padding: 1.2rem; }
-  .panel-meta { padding: 1.25rem 1rem; }
-  .section-heading, .section-heading.compact { display: block; }
-  .section-heading h2, .contact h2 { font-size: clamp(3.8rem,18vw,5.5rem); }
-  .section-heading > p:last-child { max-width: 440px; margin-top: 1.5rem; }
-  .project-grid { grid-template-columns: 1fr; }
-  .project-featured { grid-column: auto; }
-  .project-card, .project-featured { min-height: 520px; }
-  .project-body, .project-featured .project-body {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: space-between;
-    padding: 3.5rem 0 2rem;
-  }
-  .project-card:not(.project-featured) .project-body h3, .project-body h3 { font-size: clamp(3rem,15vw,4.3rem); }
-  .project-footer { align-items: flex-start; }
-  .project-footer, .project-links { flex-direction: column; }
-  .project-links, .project-cta { width: 100%; }
-  .timeline-item { grid-template-columns: 1fr; gap: 1.3rem; }
-  .timeline-item > p:last-child { grid-column: auto; }
-  .about-intro h2 { font-size: clamp(3.5rem,17vw,5rem); }
-  .education-meta { grid-template-columns: 1fr; }
-  .contact-email { overflow-wrap: anywhere; }
-  .contact-footer { grid-template-columns: 1fr auto; align-items: start; }
-  .contact-footer nav { grid-column: 1/-1; grid-row: 1; flex-wrap: wrap; }
-  .back-top { justify-self: end; }
-}
-
-@media (max-width: 420px) {
-  .hero > *, .hero-copy, .hero-panel { width: 100%; min-width: 0; max-width: 100%; }
-  .hero h1 { font-size: 13vw; }
-  .hero-role { max-width: 100%; font-size: 1.12rem; overflow-wrap: anywhere; }
-  .hero-intro { max-width: 100%; font-size: .95rem; overflow-wrap: anywhere; }
-  .button { max-width: 100%; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
-}
-
-@media (prefers-contrast: more) {
-  :root { --line: rgba(244,241,236,.42); --muted: #d1d1d5; --faint: #b7b8be; }
-}
-
-  </style>
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -633,60 +37,68 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
         <a href="#experience">Experience</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
-        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
-          <span class="theme-dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
-        </button>
       </nav>
-      <details class="nav-menu" aria-label="Mobile navigation">
-        <summary>Menu <span aria-hidden="true">↗</span></summary>
-        <nav aria-label="Mobile navigation links">
-          <a href="#work">Work</a>
-          <a href="#experience">Experience</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
-            <span class="theme-dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
-          </button>
-        </nav>
-      </details>
+      <div class="header-controls">
+        <details class="nav-menu" aria-label="Mobile navigation">
+          <summary>Menu <span aria-hidden="true">↗</span></summary>
+          <nav aria-label="Mobile navigation links">
+            <a href="#work">Work</a>
+            <a href="#experience">Experience</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </details>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark theme">
+          <span class="cord" aria-hidden="true"><span class="cord-grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18h6m-5 3h4M8 14a6 6 0 1 1 8 0c-1 1-1 2-1 2H9s0-1-1-2Z"/></svg></span></span>
+          <span class="theme-tooltip" data-theme-label aria-hidden="true">Pull for dark mode</span>
+        </button>
+      </div>
     </div>
   </header>
 
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow"><span>01</span> Portfolio / 2026</p>
-        <h1 id="hero-title">Adrian<br>Firmansyah</h1>
-        <p class="hero-role">Informatics Student · IT &amp; Creative Full-Stack Developer</p>
-        <p class="hero-intro">I combine technical problem-solving with a creative eye to build useful web applications, backend features, and digital experiences. I study Informatics at UPN “Veteran” Jakarta, develop TalentGroup.id, and work on websites at KlikWeb.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#work">View projects <span aria-hidden="true">↓</span></a>
-          <a class="button button-quiet" href="https://www.linkedin.com/in/adrian-firmansyah-ba3602251/" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+        <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> A little logic. A little imagination.</p>
+        <h1 id="hero-title">Hi, I’m Adrian<span class="accent">.</span><br><span class="hero-subtitle">I turn ideas into</span></h1>
+        <div class="role-notebook">
+          <span class="notebook-rings" aria-hidden="true"></span>
+          <p class="role-sheet" data-role-sheet aria-live="polite">Useful websites.</p>
+          <button class="role-next" type="button" aria-label="Show the next thing I build" data-role-next>↻</button>
         </div>
+        <p class="hero-intro">Full-stack developer &amp; Informatics student. I connect thoughtful interfaces with the systems behind them, from the first idea to the final deploy.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#work">Step into my work <span class="button-arrow" aria-hidden="true">↗</span></a>
+          <a class="button button-quiet" href="#contact">Let’s talk <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="hero-footnote">Based in Indonesia <span aria-hidden="true">↗</span> Building for the web.</p>
       </div>
 
-      <aside class="hero-panel" aria-label="Current focus">
-        <img class="profile-photo" src="assets/adrian-profile.png" alt="Adrian Firmansyah wearing a white shirt" width="1254" height="1254" fetchpriority="high">
-        <div class="panel-content">
-          <p class="panel-label">Currently</p>
-          <p>Building community products at TalentGroup.id and contributing to client websites at KlikWeb.</p>
-        </div>
-        <dl class="panel-meta">
-          <div><dt>Based in</dt><dd>Indonesia</dd></div>
-          <div><dt>Focus</dt><dd>Web / Backend</dd></div>
-        </dl>
+      <aside class="hero-panel" aria-label="Meet Adrian Firmansyah">
+        <span class="portrait-orbit" aria-hidden="true"></span>
+        <span class="portrait-note">The person<br>behind the pixels. <span aria-hidden="true">↴</span></span>
+        <div class="portrait-frame"><img class="profile-photo" src="assets/adrian-profile.png" alt="Adrian Firmansyah wearing a white shirt" width="1254" height="1254" fetchpriority="high"></div>
+        <span class="portrait-sticker"><span aria-hidden="true">✳</span> Built with curiosity.</span>
+        <div class="portrait-caption"><span>Adrian Firmansyah</span><span>Developer &amp; creative thinker</span></div>
       </aside>
     </section>
 
     <section class="section work" id="work" aria-labelledby="work-title">
       <header class="section-heading">
         <p class="eyebrow"><span>02</span> Selected work</p>
-        <h2 id="work-title">Products backed<br>by real work.</h2>
-        <p>A focused selection of team, client, and independent projects—with the contribution and evidence stated plainly.</p>
+        <h2 id="work-title">Good things happen<br>behind these doors.</h2>
+        <p>Pick a door. Meet a project. Here’s a look at what I’ve been building, and the part I played in bringing it to life.</p>
       </header>
 
+      <nav class="project-doors" aria-label="Explore selected projects">
+        <a class="door door-blue" href="#project-orbhita"><span class="door-inside" aria-hidden="true">Come on in <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">01</span><span class="door-plaque">Backend & data</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">Orbhita <span aria-hidden="true">↗</span></span><span class="sr-only"> — Explore backend & data</span></a>
+        <a class="door door-sage" href="#project-talentgroup"><span class="door-inside" aria-hidden="true">Come on in <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">02</span><span class="door-plaque">Community platform</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">TalentGroup <span aria-hidden="true">↗</span></span><span class="sr-only"> — Explore community platform</span></a>
+        <a class="door door-rose" href="#project-klikweb"><span class="door-inside" aria-hidden="true">Come on in <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">03</span><span class="door-plaque">Web development</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">KlikWeb <span aria-hidden="true">↗</span></span><span class="sr-only"> — Explore web development</span></a>
+        <a class="door door-ochre" href="#project-tennis"><span class="door-inside" aria-hidden="true">Come on in <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">04</span><span class="door-plaque">Play & experiment</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">Tennis Arena <span aria-hidden="true">↗</span></span><span class="sr-only"> — Explore play & experiment</span></a>
+      </nav>
+      <div class="work-list-label"><span>The work, up close</span><span>04 selected projects ↓</span></div>
       <div class="project-grid">
-        <a class="project-card project-card-link" href="https://github.com/ORBHITA-JOINTS-UGM/Orbhita" target="_blank" rel="noreferrer" aria-label="View the Orbhita repository">
+        <a id="project-orbhita" class="project-card project-card-link" href="https://github.com/ORBHITA-JOINTS-UGM/Orbhita" target="_blank" rel="noreferrer" aria-label="View the Orbhita repository">
           <span class="project-media">
             <img src="assets/projects/orbhita-ui-prototype.jpg" alt="Orbhita calendar dashboard UI prototype showing a monthly schedule and read-only Google Calendar events" width="1200" height="630">
           </span>
@@ -705,7 +117,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
           </div>
         </a>
 
-        <a class="project-card project-card-link" href="https://talentgroup.cloud/" target="_blank" rel="noreferrer" aria-label="Visit TalentGroup.id">
+        <a id="project-talentgroup" class="project-card project-card-link" href="https://talentgroup.cloud/" target="_blank" rel="noreferrer" aria-label="Visit TalentGroup.id">
           <span class="project-media">
             <img src="assets/projects/talentgroup.jpg" alt="TalentGroup.id learning platform homepage" width="1350" height="926" loading="lazy">
           </span>
@@ -723,7 +135,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
           </div>
         </a>
 
-        <a class="project-card project-card-link" href="https://klikweb.blog/" target="_blank" rel="noreferrer" aria-label="Visit KlikWeb">
+        <a id="project-klikweb" class="project-card project-card-link" href="https://klikweb.blog/" target="_blank" rel="noreferrer" aria-label="Visit KlikWeb">
           <span class="project-media">
             <img src="assets/projects/klikweb.jpg" alt="KlikWeb homepage and website portfolio" width="1350" height="926" loading="lazy">
           </span>
@@ -741,7 +153,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
           </div>
         </a>
 
-        <a class="project-card project-card-link" href="https://cobagame.vercel.app/" target="_blank" rel="noreferrer" aria-label="Play English Tennis Arena">
+        <a id="project-tennis" class="project-card project-card-link" href="https://cobagame.vercel.app/" target="_blank" rel="noreferrer" aria-label="Play English Tennis Arena">
           <span class="project-media">
             <img src="assets/projects/english-tennis-arena-gameplay.jpg" alt="English Tennis Arena gameplay with two neon paddles and a countdown" width="1363" height="904" loading="lazy">
           </span>
@@ -764,7 +176,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
     <section class="section experience" id="experience" aria-labelledby="experience-title">
       <header class="section-heading compact">
         <p class="eyebrow"><span>03</span> Experience</p>
-        <h2 id="experience-title">Learning by<br>shipping.</h2>
+        <h2 id="experience-title">Real teams.<br>Real learning.</h2>
       </header>
       <div class="timeline">
         <article class="timeline-item">
@@ -783,7 +195,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
     <section class="section about" id="about" aria-labelledby="about-title">
       <div class="about-intro">
         <p class="eyebrow"><span>04</span> About &amp; education</p>
-        <h2 id="about-title">A developer who cares about the system behind the screen.</h2>
+        <h2 id="about-title">Curious by nature.<br>Developer by practice.</h2>
         <p>I’m studying Informatics while building products with real users, teams, and constraints. I combine structured engineering with visual thinking to turn product requirements into clear interfaces, dependable APIs, and creative digital experiences.</p>
       </div>
       <div class="education-card">
@@ -805,7 +217,8 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
 
     <section class="contact" id="contact" aria-labelledby="contact-title">
       <p class="eyebrow"><span>05</span> Contact</p>
-      <h2 id="contact-title">Have a project<br>worth discussing?</h2>
+      <h2 id="contact-title">Got an idea?<br>Let’s bring it to life.</h2>
+      <a class="button button-primary contact-button" href="mailto:adrianfirmansyah055@gmail.com">Start a conversation <span class="button-arrow" aria-hidden="true">↗</span></a>
       <p class="contact-copy">For professional opportunities, collaborations, or a conversation about building useful software, send me an email.</p>
       <a class="contact-email" href="mailto:adrianfirmansyah055@gmail.com">adrianfirmansyah055@gmail.com <span aria-hidden="true">↗</span></a>
       <div class="contact-footer">
@@ -819,33 +232,6 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
       </div>
     </section>
   </main>
-  <script>
-    (() => {
-      const storageKey = "adrian-theme";
-      const root = document.documentElement;
-      const toggles = document.querySelectorAll("[data-theme-toggle]");
-
-      const render = () => {
-        const isDark = root.dataset.theme === "dark";
-        toggles.forEach((button) => {
-          button.setAttribute("aria-pressed", String(isDark));
-          button.setAttribute("aria-label", `Switch to ${isDark ? "light" : "dark"} theme`);
-          button.querySelector("[data-theme-label]").textContent = isDark ? "Light" : "Dark";
-        });
-      };
-
-      toggles.forEach((button) => {
-        button.addEventListener("click", () => {
-          const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
-          if (nextTheme === "dark") root.dataset.theme = "dark";
-          else delete root.dataset.theme;
-          try { localStorage.setItem(storageKey, nextTheme); } catch (error) {}
-          render();
-        });
-      });
-
-      render();
-    })();
-  </script>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>
