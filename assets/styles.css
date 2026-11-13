@@ -754,12 +754,17 @@ h1 {
   color:var(--text);
 }
 
-.door:focus-visible .door-leaf,.door.is-opening .door-leaf {
+.door:focus-visible .door-leaf {
   transform:rotateY(-65deg);
 }
 
+.door.is-opening .door-leaf {
+  transform:rotateY(-105deg);
+  transition-duration:.5s;
+}
+
 @media(hover:hover) {
-  .door:hover .door-leaf {
+  .door:hover:not(.is-opening) .door-leaf {
     transform:rotateY(-45deg);
   }
 }

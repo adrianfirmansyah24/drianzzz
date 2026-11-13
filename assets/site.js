@@ -74,11 +74,26 @@
     void sheet.offsetWidth;
     sheet.classList.add('is-flipping');
   });
-  document.querySelectorAll('.door').forEach(door => {
-    door.addEventListener('click', () => {
+  const doors = document.querySelectorAll('.door');
+  let doorNavigation = null;
+  doors.forEach(door => {
+    door.addEventListener('click', event => {
+      // Keep native link behavior for new tabs and reduced motion.
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || motion.matches) return;
+      event.preventDefault();
+      if (doorNavigation !== null) return;
       door.classList.add('is-opening');
-      setTimeout(() => door.classList.remove('is-opening'), 900);
+      doorNavigation = setTimeout(() => {
+        doorNavigation = null;
+        window.location.assign(door.href);
+      }, 550);
     });
+  });
+  // Restore the doors when returning with the browser's Back button.
+  window.addEventListener('pageshow', () => {
+    clearTimeout(doorNavigation);
+    doorNavigation = null;
+    doors.forEach(door => door.classList.remove('is-opening'));
   });
   render();
 })();
