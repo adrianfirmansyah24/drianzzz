@@ -87,14 +87,58 @@
       <header class="section-heading">
         <p class="eyebrow"><span>02</span> Selected work</p>
         <h2 id="work-title">Good things happen<br>behind these doors.</h2>
-        <p>Pick a door to visit a project, or scroll down for the story behind it. Here’s what I’ve been building.</p>
+        <p>A little peek before you step inside. Hover or tap a door to preview the project, then follow your curiosity.</p>
       </header>
 
       <nav class="project-doors" aria-label="Explore selected projects">
-        <a class="door door-blue" href="https://github.com/ORBHITA-JOINTS-UGM/Orbhita"><span class="door-inside" aria-hidden="true">Visit project <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">01</span><span class="door-plaque">Backend & data</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">Orbhita <span aria-hidden="true">↗</span></span><span class="sr-only"> — View the Orbhita repository</span></a>
-        <a class="door door-sage" href="https://talentgroup.cloud/"><span class="door-inside" aria-hidden="true">Visit project <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">02</span><span class="door-plaque">Community platform</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">TalentGroup <span aria-hidden="true">↗</span></span><span class="sr-only"> — Visit TalentGroup</span></a>
-        <a class="door door-rose" href="https://klikweb.blog/"><span class="door-inside" aria-hidden="true">Visit project <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">03</span><span class="door-plaque">Web development</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">KlikWeb <span aria-hidden="true">↗</span></span><span class="sr-only"> — Visit KlikWeb</span></a>
-        <a class="door door-ochre" href="https://cobagame.vercel.app/"><span class="door-inside" aria-hidden="true">Visit project <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">04</span><span class="door-plaque">Play & experiment</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">Tennis Arena <span aria-hidden="true">↗</span></span><span class="sr-only"> — Play English Tennis Arena</span></a>
+        <div class="door-scene door-blue">
+          <a class="door door-blue" href="https://github.com/ORBHITA-JOINTS-UGM/Orbhita" aria-expanded="false" aria-controls="preview-orbhita"><span class="door-inside" aria-hidden="true">Take a look <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">01</span><span class="door-plaque">Backend & data</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">Orbhita <span aria-hidden="true">↗</span></span><span class="sr-only"> — View the Orbhita repository</span></a>
+          <div class="door-preview" id="preview-orbhita" role="region" aria-labelledby="preview-title-orbhita" aria-hidden="true" inert>
+            <button class="preview-dismiss" type="button" aria-label="Close Orbhita preview">×</button>
+            <a class="preview-link" href="https://github.com/ORBHITA-JOINTS-UGM/Orbhita" aria-labelledby="preview-title-orbhita">
+            <span class="preview-eyebrow"><span>Project preview</span><span>01 / 04</span></span>
+            <span class="preview-visual"><img src="assets/projects/orbhita-ui-prototype.jpg" alt="Orbhita project preview" width="1200" height="800" loading="lazy"><span class="preview-category">Backend &amp; data</span></span>
+            <span class="preview-content"><span class="preview-title" id="preview-title-orbhita">Orbhita</span><span class="preview-summary">Academic schedules and calendar events, together in one planning dashboard.</span><span class="preview-tech">Supabase · PostgreSQL</span></span>
+            <span class="preview-footer"><span>View repository</span><span class="preview-arrow" aria-hidden="true">↗</span></span>
+            </a>
+          </div>
+        </div>
+        <div class="door-scene door-sage">
+          <a class="door door-sage" href="https://talentgroup.cloud/" aria-expanded="false" aria-controls="preview-talentgroup"><span class="door-inside" aria-hidden="true">Take a look <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">02</span><span class="door-plaque">Community platform</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">TalentGroup <span aria-hidden="true">↗</span></span><span class="sr-only"> — Visit TalentGroup</span></a>
+          <div class="door-preview" id="preview-talentgroup" role="region" aria-labelledby="preview-title-talentgroup" aria-hidden="true" inert>
+            <button class="preview-dismiss" type="button" aria-label="Close TalentGroup preview">×</button>
+            <a class="preview-link" href="https://talentgroup.cloud/" aria-labelledby="preview-title-talentgroup">
+            <span class="preview-eyebrow"><span>Project preview</span><span>02 / 04</span></span>
+            <span class="preview-visual"><img src="assets/projects/talentgroup.jpg" alt="TalentGroup.id project preview" width="1200" height="800" loading="lazy"><span class="preview-category">Community platform</span></span>
+            <span class="preview-content"><span class="preview-title" id="preview-title-talentgroup">TalentGroup.id</span><span class="preview-summary">A learning community built around technology workshops and webinars.</span><span class="preview-tech">Full-stack · Community</span></span>
+            <span class="preview-footer"><span>Visit platform</span><span class="preview-arrow" aria-hidden="true">↗</span></span>
+            </a>
+          </div>
+        </div>
+        <div class="door-scene door-rose">
+          <a class="door door-rose" href="https://klikweb.blog/" aria-expanded="false" aria-controls="preview-klikweb"><span class="door-inside" aria-hidden="true">Take a look <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">03</span><span class="door-plaque">Web development</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">KlikWeb <span aria-hidden="true">↗</span></span><span class="sr-only"> — Visit KlikWeb</span></a>
+          <div class="door-preview" id="preview-klikweb" role="region" aria-labelledby="preview-title-klikweb" aria-hidden="true" inert>
+            <button class="preview-dismiss" type="button" aria-label="Close KlikWeb preview">×</button>
+            <a class="preview-link" href="https://klikweb.blog/" aria-labelledby="preview-title-klikweb">
+            <span class="preview-eyebrow"><span>Project preview</span><span>03 / 04</span></span>
+            <span class="preview-visual"><img src="assets/projects/klikweb.jpg" alt="KlikWeb project preview" width="1200" height="800" loading="lazy"><span class="preview-category">Web development</span></span>
+            <span class="preview-content"><span class="preview-title" id="preview-title-klikweb">KlikWeb</span><span class="preview-summary">Websites for KlikWeb and its small-business clients.</span><span class="preview-tech">Laravel · MySQL</span></span>
+            <span class="preview-footer"><span>Visit website</span><span class="preview-arrow" aria-hidden="true">↗</span></span>
+            </a>
+          </div>
+        </div>
+        <div class="door-scene door-ochre">
+          <a class="door door-ochre" href="https://cobagame.vercel.app/" aria-expanded="false" aria-controls="preview-tennis"><span class="door-inside" aria-hidden="true">Take a look <span>↗</span></span><span class="door-leaf" aria-hidden="true"><span class="door-number">04</span><span class="door-plaque">Play & experiment</span><span class="door-handle"></span><span class="door-panel"></span></span><span class="door-caption">Tennis Arena <span aria-hidden="true">↗</span></span><span class="sr-only"> — Play English Tennis Arena</span></a>
+          <div class="door-preview" id="preview-tennis" role="region" aria-labelledby="preview-title-tennis" aria-hidden="true" inert>
+            <button class="preview-dismiss" type="button" aria-label="Close Tennis Arena preview">×</button>
+            <a class="preview-link" href="https://cobagame.vercel.app/" aria-labelledby="preview-title-tennis">
+            <span class="preview-eyebrow"><span>Project preview</span><span>04 / 04</span></span>
+            <span class="preview-visual"><img src="assets/projects/english-tennis-arena-gameplay.jpg" alt="English Tennis Arena project preview" width="1200" height="800" loading="lazy"><span class="preview-category">Play &amp; experiment</span></span>
+            <span class="preview-content"><span class="preview-title" id="preview-title-tennis">English Tennis Arena</span><span class="preview-summary">Browser tennis with timed English questions and a two-player mode.</span><span class="preview-tech">JavaScript · Canvas</span></span>
+            <span class="preview-footer"><span>Play game</span><span class="preview-arrow" aria-hidden="true">↗</span></span>
+            </a>
+          </div>
+        </div>
       </nav>
       <div class="work-list-label"><span>The work, up close</span><span>04 selected projects ↓</span></div>
       <div class="project-grid">

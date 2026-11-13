@@ -74,26 +74,111 @@
     void sheet.offsetWidth;
     sheet.classList.add('is-flipping');
   });
-  const doors = document.querySelectorAll('.door');
-  let doorNavigation = null;
-  doors.forEach(door => {
+  const scenes = [...document.querySelectorAll('.door-scene')];
+  const closeTimers = new Map();
+  let pointerType = 'mouse';
+  const closeScene = scene => {
+    clearTimeout(closeTimers.get(scene));
+    closeTimers.delete(scene);
+    scene.classList.remove('is-open');
+    scene.querySelector('.door').setAttribute('aria-expanded', 'false');
+    const preview = scene.querySelector('.door-preview');
+    preview.inert = true;
+    preview.setAttribute('aria-hidden', 'true');
+  };
+  const positionPreview = scene => {
+    const preview = scene.querySelector('.door-preview');
+    const rect = scene.getBoundingClientRect();
+    const headerBottom = Math.max(
+      document.querySelector('.site-header').getBoundingClientRect().bottom,
+      toggle.getBoundingClientRect().bottom
+    );
+    preview.style.maxHeight = `${Math.max(150, innerHeight - headerBottom - 32)}px`;
+    // Account for the slight tilt, so edge doors stay inside the viewport.
+    const halfWidth = preview.offsetWidth / 2 + 9;
+    const centerX = rect.left + rect.width / 2;
+    const safeX = Math.max(halfWidth + 10, Math.min(innerWidth - halfWidth - 10, centerX));
+    const halfHeight = preview.offsetHeight / 2 + 7;
+    const centerY = rect.top + rect.height / 2;
+    const safeY = Math.max(headerBottom + halfHeight + 12, Math.min(innerHeight - halfHeight - 12, centerY));
+    scene.style.setProperty('--preview-shift', `${safeX - centerX}px`);
+    scene.style.setProperty('--preview-top', `${safeY - rect.top}px`);
+    scene.style.setProperty('--preview-return-y', `${centerY - safeY + 45}px`);
+  };
+  const openScene = scene => {
+    clearTimeout(closeTimers.get(scene));
+    closeTimers.delete(scene);
+    scenes.forEach(other => { if (other !== scene) closeScene(other); });
+    positionPreview(scene);
+    scene.classList.add('is-open');
+    scene.querySelector('.door').setAttribute('aria-expanded', 'true');
+    const preview = scene.querySelector('.door-preview');
+    preview.inert = false;
+    preview.setAttribute('aria-hidden', 'false');
+  };
+  const scheduleClose = scene => {
+    clearTimeout(closeTimers.get(scene));
+    closeTimers.set(scene, setTimeout(() => {
+      const focused = document.activeElement;
+      if (scene.contains(focused) && focused.matches(':focus-visible')) return;
+      closeScene(scene);
+    }, 180));
+  };
+  document.addEventListener('pointerdown', event => {
+    pointerType = event.pointerType;
+    scenes.forEach(scene => { if (!scene.contains(event.target)) closeScene(scene); });
+  });
+  scenes.forEach(scene => {
+    const door = scene.querySelector('.door');
+    scene.querySelector('.preview-dismiss').addEventListener('click', () => {
+      door.focus({ preventScroll: true });
+      closeScene(scene);
+    });
+    const image = scene.querySelector('.preview-visual img');
+    const fallback = document.createElement('span');
+    fallback.className = 'preview-image-fallback';
+    fallback.textContent = 'Image preview unavailable. You can still open the project.';
+    fallback.hidden = true;
+    image.after(fallback);
+    const imageFailed = () => {
+      image.style.visibility = 'hidden';
+      fallback.hidden = false;
+    };
+    image.addEventListener('error', imageFailed);
+    if (image.complete && image.naturalWidth === 0) imageFailed();
+    scene.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse' || event.pointerType === 'pen') openScene(scene);
+    });
+    scene.addEventListener('pointerleave', event => {
+      if (event.pointerType !== 'touch') scheduleClose(scene);
+    });
+    scene.addEventListener('focusin', event => {
+      if (event.target.matches(':focus-visible') && pointerType !== 'touch') openScene(scene);
+    });
+    scene.addEventListener('focusout', event => {
+      if (!scene.contains(event.relatedTarget)) scheduleClose(scene);
+    });
     door.addEventListener('click', event => {
-      // Keep native link behavior for new tabs and reduced motion.
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || motion.matches) return;
-      event.preventDefault();
-      if (doorNavigation !== null) return;
-      door.classList.add('is-opening');
-      doorNavigation = setTimeout(() => {
-        doorNavigation = null;
-        window.location.assign(door.href);
-      }, 550);
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (pointerType === 'touch' && event.detail !== 0 && !scene.classList.contains('is-open')) {
+        event.preventDefault();
+        openScene(scene);
+      }
     });
   });
-  // Restore the doors when returning with the browser's Back button.
-  window.addEventListener('pageshow', () => {
-    clearTimeout(doorNavigation);
-    doorNavigation = null;
-    doors.forEach(door => door.classList.remove('is-opening'));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Tab') pointerType = 'keyboard';
+    if (event.key !== 'Escape') return;
+    scenes.forEach(scene => {
+      if (scene.contains(document.activeElement) && document.activeElement !== scene.querySelector('.door')) {
+        scene.querySelector('.door').focus({ preventScroll: true });
+      }
+      closeScene(scene);
+    });
   });
+  const resetScenes = () => scenes.forEach(closeScene);
+  window.addEventListener('resize', resetScenes);
+  window.addEventListener('scroll', resetScenes, { passive: true });
+  window.addEventListener('pageshow', resetScenes);
   render();
 })();
