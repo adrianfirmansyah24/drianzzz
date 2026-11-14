@@ -14,6 +14,7 @@ Energy 2 / Rhythm 3 / Motion 2. The portrait and notebook introduce Adrian, door
 - Preview cards use a paper surface and image mount to distinguish a quick look from the larger, persistent project descriptions below.
 - Use actual project screenshots and concise summaries of existing project information. Add no invented statistics, testimonials, or claims.
 - Opening a door precedes the card emerging. On departure, the card retracts before the door closes. The animation explains where the preview belongs.
+- Door movement takes 1.1 seconds with gradual acceleration and deceleration. The card starts emerging after 0.5 seconds and retracts over 0.55 seconds before the door closes, giving the sequence a more deliberate pace.
 - Allow a short exit grace period so the pointer can move between the door and preview. Open only one preview at a time.
 - Preview position stays inside the viewport, including near the first and last doors, and clears the hanging theme switch. Touch uses first tap to preview, then a second tap or card tap to visit. A 44px close button provides a reliable way to dismiss the preview on touch screens.
 - Keyboard focus opens the same preview; Escape dismisses it. Reduced motion removes the choreography while preserving the interaction.
